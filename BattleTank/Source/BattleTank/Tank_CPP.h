@@ -4,6 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Components/InputComponent.h"
+#include"Camera/CameraComponent.h"
+#include "Components/ActorComponent.h"
 #include "Tank_CPP.generated.h"
 
 UCLASS()
@@ -27,19 +31,36 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	//the scene root component of the default pawn
+	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* TankBody=nullptr;
 
 	//static turret mesh
+	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* Turret = nullptr;
 
-	//static turret mesh
+	//static barrel mesh
+	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* Barrel = nullptr;
 
-	//static turret mesh
+	//static track mesh
+	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* Track_01 = nullptr;
 
-	//static turret mesh
+	//static track mesh
+	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* Track_02 = nullptr;
 
-	
+	UPROPERTY(EditAnywhere)
+	USpringArmComponent* SpringArm = nullptr;
+
+	UPROPERTY(EditAnywhere)
+		UCameraComponent* Camera = nullptr;
+
+	UFUNCTION()
+		void SetCameraAzimuth(float AxisValue);
+
+	FVector2D CameraInput;
+
+	UFUNCTION()
+	void SetCameraAltitude(float AxisValue);
 };
