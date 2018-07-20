@@ -5,10 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Components/InputComponent.h"
-#include"Camera/CameraComponent.h"
-#include "Components/ActorComponent.h"
+#include "Camera/CameraComponent.h"
 #include "Tank_CPP.generated.h"
+
 
 UCLASS()
 class BATTLETANK_API ATank_CPP : public APawn
@@ -57,10 +56,11 @@ public:
 		UCameraComponent* Camera = nullptr;
 
 	UFUNCTION()
-		void SetCameraAzimuth(float AxisValue);
-
-	FVector2D CameraInput;
+		void SetSpringArmAzimuthAngle(float AxisValue);
+	
+	//Spring arm 2D rotation
+	FVector2D SpringArmRotation;
 
 	UFUNCTION()
-	void SetCameraAltitude(float AxisValue);
+	void SetSpringArmAltitudeAngle(float AxisValue);
 };

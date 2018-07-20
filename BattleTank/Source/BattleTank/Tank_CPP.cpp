@@ -1,12 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Tank_CPP.h"
-#include"crtdbg.h"
-#include"UObject/ConstructorHelpers.h"
-#include"Components/StaticMeshComponent.h"
-#include"Misc/App.h"
-#include"Engine/World.h"
-#include"Engine/EngineTypes.h"
+#include "Components/StaticMeshComponent.h"
+#include "Misc/App.h"
+#include "Engine/World.h"
+#include "Engine/EngineTypes.h"
+#include "crtdbg.h"
+#include "UObject/ConstructorHelpers.h"
+
+
 
 // Sets default values
 ATank_CPP::ATank_CPP()
@@ -14,7 +16,9 @@ ATank_CPP::ATank_CPP()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	
+	/////############################################################################////////////////
+	//#######    above all these things here uobject finder is only returning a    ######////////////
+	//###############     uclass so maybe uclass finder would have been a better choice #######//////
 
 
 	///getting a reference to the barrel asset
@@ -76,7 +80,7 @@ ATank_CPP::ATank_CPP()
 		
 
 		ATank_CPP::SpringArm->SetupAttachment(Turret);
-		ATank_CPP::SpringArm->RelativeRotation = FRotator(-25.0f, 0, 0);
+		ATank_CPP::SpringArm->RelativeRotation = FRotator(-19.0f, 0, 0);
 		ATank_CPP::SpringArm->TargetArmLength = 800.0f;
 		ATank_CPP::SpringArm->bEnableCameraLag = true;
 		ATank_CPP::SpringArm->CameraLagSpeed = 3.0f;
@@ -111,34 +115,35 @@ void ATank_CPP::Tick(float DeltaTime)
 // Called to bind functionality to input
 void ATank_CPP::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
+
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis("AimAzimuth",this,&ATank_CPP::SetCameraAzimuth);
-	PlayerInputComponent->BindAxis("AimAltitude", this, &ATank_CPP::SetCameraAltitude);
+	PlayerInputComponent->BindAxis("AimAzimuth",this,&ATank_CPP::SetSpringArmAzimuthAngle);
+	PlayerInputComponent->BindAxis("AimAltitude", this, &ATank_CPP::SetSpringArmAltitudeAngle);
 
 
 }
 
-
-void ATank_CPP::SetCameraAzimuth(float AxisValue)
+///this is the delegate function which was bound to Aim Azimuth mind it it needs the function s signature to be exactly as this;
+void ATank_CPP::SetSpringArmAzimuthAngle(float AxisValue)
 {
 	
 	//_ASSERTE( GetInputAxisValue("AimAzimuth")==AxisValue);
-	CameraInput.X = AxisValue;
-	FRotator NewRotator = SpringArm->GetComponentRotation();;
-	NewRotator.Yaw += CameraInput.X;
-	SpringArm->SetWorldRotation(NewRotator);
+	SpringArmRotation.X = AxisValue;
+	FRotator SpringArmTickRotation = SpringArm->GetComponentRotation();
+	SpringArmTickRotation.Yaw += SpringArmRotation.X;
+	SpringArm->SetWorldRotation(SpringArmTickRotation);
 	
 
 	//TODO find a way to setup spring arms yaw according to the input
 }
 
-void ATank_CPP::SetCameraAltitude(float AxisValue)
+void ATank_CPP::SetSpringArmAltitudeAngle(float AxisValue)
 {
-	CameraInput.Y = AxisValue;
-	FRotator NewRotator = SpringArm->GetComponentRotation();;
-	NewRotator.Pitch += CameraInput.Y;
-	SpringArm->SetWorldRotation(NewRotator);
+	SpringArmRotation.Y = AxisValue;
+	FRotator SpringArmTickRotation = SpringArm->GetComponentRotation();
+	SpringArmTickRotation.Pitch += SpringArmRotation.Y;
+	SpringArm->SetWorldRotation(SpringArmTickRotation);
 	//TODO find a way to setup spring arm pitch according to the input axis values
 }
 
