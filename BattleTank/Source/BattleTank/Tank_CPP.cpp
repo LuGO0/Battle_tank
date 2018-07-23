@@ -10,6 +10,10 @@
 
 
 
+///////// WARNING !!!!!!!!!!!!!!!! HARD CODED REFERENCE ;( !!!!!!!  i will take care of that from the next project :]
+
+
+
 // Sets default values
 ATank_CPP::ATank_CPP()
 {
@@ -79,6 +83,7 @@ ATank_CPP::ATank_CPP()
 		ATank_CPP::Track_02->AttachToComponent(TankBody, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false), TEXT("track_02"));
 		
 
+		///configuring the spring arm
 		ATank_CPP::SpringArm->SetupAttachment(Turret);
 		ATank_CPP::SpringArm->RelativeRotation = FRotator(-19.0f, 0, 0);
 		ATank_CPP::SpringArm->TargetArmLength = 800.0f;
@@ -88,12 +93,7 @@ ATank_CPP::ATank_CPP()
 
 		//attaching camera to the spring arm
 		ATank_CPP::Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
-		
 	}
-
-	
-
-	
 }
 
 

@@ -16,8 +16,5 @@ class BATTLETANK_API ABattleTankGameModeBase : public AGameModeBase
 	
 public:
 		ABattleTankGameModeBase();
-	
-	
-	
 };
 

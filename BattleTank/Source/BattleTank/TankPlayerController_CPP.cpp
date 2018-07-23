@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankPlayerController_CPP.h"
-
+#include "Blueprint/UserWidget.h"
 
 
 
@@ -18,19 +18,18 @@ void ATankPlayerController_CPP::BeginPlay()
 	{
 		UserWidget = CreateWidget<UUserWidget>(this, UIWidget);
 
-		if(1)
+		if(UserWidget)
 		{
 			UserWidget->AddToViewport();
 			UE_LOG(LogTemp, Warning, TEXT("uwidget found actually"));
 		}
 		//bShowMouseCursor = true;  it constrains me from looking 360 degree
 	}
-
-	
 }
 
-
-
-
-
-
+ATank_CPP * ATankPlayerController_CPP::GetControlledTank() const
+{/*
+	return static_cast<ATank_CPP*>(GetPawn());*/
+	// u could also have used the unreal templated cast function but that will do
+	return nullptr;
+}

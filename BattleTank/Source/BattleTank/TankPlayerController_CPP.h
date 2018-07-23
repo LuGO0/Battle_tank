@@ -4,8 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "UObject/ConstructorHelpers.h"
-#include "Blueprint/UserWidget.h"
+#include "Tank_CPP.h"
 #include "TankPlayerController_CPP.generated.h"
 
 /**
@@ -20,10 +19,12 @@ class BATTLETANK_API ATankPlayerController_CPP : public APlayerController
 		virtual void BeginPlay() override;
 
 		////it has to be public i dont know why
-		UPROPERTY(EditAnywhere,BlueprintReadOnly)
-		TSubclassOf<class UUserWidget> UIWidget;
-
-		//object pointer used to stroe the instance of the above class
+		UPROPERTY(EditAnywhere,BlueprintReadWrite)               // either include this class keyword so that the compiler knows that this is a class
+		TSubclassOf<class UUserWidget> UIWidget;                //or include the header file which includes the declaration for this class
+		                                                         //in this header file that is the file "Blueprint/UserWidget.h"                                                           
+		//object pointer used to store the instance of the above class
 		UUserWidget* UserWidget;
-		
+
+		//get the tank this tank player controller is posssessing
+		ATank_CPP* GetControlledTank() const;
 };
