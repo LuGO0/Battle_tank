@@ -7,6 +7,7 @@
 #include "Engine/EngineTypes.h"
 #include "crtdbg.h"
 #include "UObject/ConstructorHelpers.h"
+#include"Classes/AIController.h"
 
 
 
@@ -23,6 +24,21 @@ ATank_CPP::ATank_CPP()
 	/////############################################################################////////////////
 	//#######    above all these things here uobject finder is only returning a    ######////////////
 	//###############     uclass so maybe uclass finder would have been a better choice #######//////
+	
+	
+	//setting up AI debug macro
+	static ConstructorHelpers::FClassFinder<AAIController> AIController(TEXT("Class'/Script/BattleTank.TankAIController_CPP'"));
+	if (AIController.Class)
+	{
+		AIControllerClass = AIController.Class;
+		AutoPossessAI = EAutoPossessAI::PlacedInWorld;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AI controller asset problem"));
+	}
+
+
 
 
 	///getting a reference to the barrel asset

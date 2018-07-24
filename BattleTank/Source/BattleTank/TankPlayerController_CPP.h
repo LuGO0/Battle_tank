@@ -16,6 +16,10 @@ class BATTLETANK_API ATankPlayerController_CPP : public APlayerController
 	GENERATED_BODY()
 	
 	public:
+		///player controller constructor
+		ATankPlayerController_CPP();
+
+		///begin play method from player controllers parent
 		virtual void BeginPlay() override;
 
 		////it has to be public i dont know why

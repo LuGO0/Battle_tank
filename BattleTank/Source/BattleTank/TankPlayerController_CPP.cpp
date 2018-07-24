@@ -2,8 +2,23 @@
 
 #include "TankPlayerController_CPP.h"
 #include "Blueprint/UserWidget.h"
+#include "UObject/ConstructorHelpers.h"
+#include "Classes/AIController.h"
 
 
+
+ATankPlayerController_CPP::ATankPlayerController_CPP()
+{/*
+	///TODO logic for spawning ll other tanks as AI tanks and hard code the tankAI controller_CPP here
+	static ConstructorHelpers::FClassFinder<AAIController> AIController(TEXT("Class'/Script/BattleTank.TankAIController_CPP'"));
+	if (AIController.Class)
+	{
+		GetPawn()->AIControllerClass = AIController.Class;
+		GetPawn()->AutoPossessAI = EAutoPossessAI::PlacedInWorld;
+	}
+	else
+		return;*/
+}
 
 
 void ATankPlayerController_CPP::BeginPlay()
@@ -25,11 +40,18 @@ void ATankPlayerController_CPP::BeginPlay()
 		}
 		//bShowMouseCursor = true;  it constrains me from looking 360 degree
 	}
+
+	ATank_CPP* ControlledTank = GetControlledTank();
+	if (ControlledTank)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("possesing an player tank"));
+	}
+	else return;
 }
 
 ATank_CPP * ATankPlayerController_CPP::GetControlledTank() const
-{/*
-	return static_cast<ATank_CPP*>(GetPawn());*/
+{
 	// u could also have used the unreal templated cast function but that will do
-	return nullptr;
+	return static_cast<ATank_CPP*>(GetPawn());
+	
 }
