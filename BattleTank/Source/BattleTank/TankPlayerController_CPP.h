@@ -22,6 +22,9 @@ class BATTLETANK_API ATankPlayerController_CPP : public APlayerController
 		///begin play method from player controllers parent
 		virtual void BeginPlay() override;
 
+		// Called every frame
+		virtual void Tick(float DeltaTime) override;
+
 		////it has to be public i dont know why
 		UPROPERTY(EditAnywhere,BlueprintReadWrite)               // either include this class keyword so that the compiler knows that this is a class
 		TSubclassOf<class UUserWidget> UIWidget;                //or include the header file which includes the declaration for this class
@@ -29,6 +32,19 @@ class BATTLETANK_API ATankPlayerController_CPP : public APlayerController
 		//object pointer used to store the instance of the above class
 		UUserWidget* UserWidget;
 
+		//the pawn being possessed
+		ATank_CPP* ControlledTank;
+
+private:
 		//get the tank this tank player controller is posssessing
 		ATank_CPP* GetControlledTank() const;
+
+		//aim at the crossshair every tick
+		void AimAtCrossHair();
+
+		//
+		bool GetSightRayHitLocation(FVector& HitLocation) const;
+
+		//
+		bool GetCrossHairDirection(FVector2D& CrosshairViewportLocation_, FVector& CrosshairDirection_, FVector& CameraWorldLocation_) const;
 };

@@ -4,20 +4,15 @@
 #include "Blueprint/UserWidget.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Classes/AIController.h"
+#include "Engine/World.h"
+#include "GameFramework/Actor.h"
+#include "GameFramework/Controller.h"
 
 
 
 ATankPlayerController_CPP::ATankPlayerController_CPP()
-{/*
-	///TODO logic for spawning ll other tanks as AI tanks and hard code the tankAI controller_CPP here
-	static ConstructorHelpers::FClassFinder<AAIController> AIController(TEXT("Class'/Script/BattleTank.TankAIController_CPP'"));
-	if (AIController.Class)
-	{
-		GetPawn()->AIControllerClass = AIController.Class;
-		GetPawn()->AutoPossessAI = EAutoPossessAI::PlacedInWorld;
-	}
-	else
-		return;*/
+{
+	//constructor
 }
 
 
@@ -36,7 +31,7 @@ void ATankPlayerController_CPP::BeginPlay()
 		if(UserWidget)
 		{
 			UserWidget->AddToViewport();
-			UE_LOG(LogTemp, Warning, TEXT("uwidget found actually"));
+			//UE_LOG(LogTemp, Warning, TEXT("uwidget found actually"));
 		}
 		//bShowMouseCursor = true;  it constrains me from looking 360 degree
 	}
@@ -44,9 +39,19 @@ void ATankPlayerController_CPP::BeginPlay()
 	ATank_CPP* ControlledTank = GetControlledTank();
 	if (ControlledTank)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("possesing an player tank"));
+		UE_LOG(LogTemp, Warning, TEXT("possesing an player TANK :%s"), *ControlledTank->GetName());
 	}
 	else return;
+}
+
+void ATankPlayerController_CPP::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	AimAtCrossHair();
+	FVector HitLocation;
+	GetSightRayHitLocation(HitLocation);
+	//UE_LOG(LogTemp, Warning, TEXT("TICK TICK BOOM"));
+
 }
 
 ATank_CPP * ATankPlayerController_CPP::GetControlledTank() const
@@ -54,4 +59,67 @@ ATank_CPP * ATankPlayerController_CPP::GetControlledTank() const
 	// u could also have used the unreal templated cast function but that will do
 	return static_cast<ATank_CPP*>(GetPawn());
 	
+}
+
+
+void ATankPlayerController_CPP::AimAtCrossHair()
+{
+	if (!ControlledTank) { return; }
+	
+	FVector HitLocation;
+	GetSightRayHitLocation(HitLocation);
+	
+	//get the world location of the line trace through the crosshair
+	//most dii=fficult part tell the possessed tank to aim at this point and maybe move the barrel accordingly
+
+}
+
+bool ATankPlayerController_CPP::GetSightRayHitLocation(FVector& HitLocation) const
+{
+	
+
+	//find the crossshair location
+	int32 ViewportSizeX, ViewportSizeY;
+
+	//getting the viewport size
+	GetViewportSize(ViewportSizeX, ViewportSizeY);
+
+	float CrosshairXLocation = 0.5, CrosshairYLocation=0.333333;
+
+	FVector2D CrosshairViewportLocation;
+
+	CrosshairViewportLocation.X = ViewportSizeX * CrosshairXLocation;
+	CrosshairViewportLocation.Y = ViewportSizeY * CrosshairYLocation;
+
+	FVector CrosshairDirection;
+	FVector CameraWorldLocation;
+	
+	if (GetCrossHairDirection(CrosshairViewportLocation, CrosshairDirection, CameraWorldLocation))
+	{
+		//line trace along that direction ,we see what we hit
+		FHitResult HitResult;
+		float LineTraceRange = 1000000;
+		if (GetWorld()->LineTraceSingleByChannel(
+			HitResult,
+			GetPawn()->GetActorLocation(),
+			GetPawn()->GetActorLocation()+CrosshairDirection*LineTraceRange,
+			ECollisionChannel::ECC_Visibility)
+			//two defaulted params
+			)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Hit location : %s"), *(HitResult.Location.ToString()));
+			}
+
+		
+		//UE_LOG(LogTemp, Warning, TEXT("3D world direction of the crosshair:%s"), *CrosshairDirection.ToString());
+
+	}
+	
+	return false;
+}
+
+bool ATankPlayerController_CPP::GetCrossHairDirection(FVector2D& CrosshairViewportLocation_,FVector& CrosshairDirection_,FVector& CameraWorldLocation_) const
+{
+	return DeprojectScreenPositionToWorld(CrosshairViewportLocation_.X, CrosshairViewportLocation_.Y, CameraWorldLocation_, CrosshairDirection_);
+	// Deprojeceting the screen to the world
 }

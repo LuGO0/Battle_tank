@@ -19,8 +19,13 @@ public:
 		///begin play method from AI player controllers parent
 		virtual void BeginPlay() override;
 
+		
 
 		//get the tank this tank player controller is posssessing
 		ATank_CPP* GetControlledTank() const;
+
+		//get the tank player controller pawn  //actually this will be used for aiming at the player cotroller by the AI tanks
+		ATank_CPP* GetPlayerControlledPawn() const;
+
 	
 };
