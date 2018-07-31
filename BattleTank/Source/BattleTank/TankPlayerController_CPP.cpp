@@ -7,7 +7,11 @@
 #include "Engine/World.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/Controller.h"
+#include"Camera/PlayerCameraManager.h"
 
+
+//////////////////////////  i learnt something of the design element of c++ that is chaining the bool functions to track down exceptions
+///////////////////////////    couldve used exceptions as well
 
 
 ATankPlayerController_CPP::ATankPlayerController_CPP()
@@ -36,7 +40,7 @@ void ATankPlayerController_CPP::BeginPlay()
 		//bShowMouseCursor = true;  it constrains me from looking 360 degree
 	}
 
-	ATank_CPP* ControlledTank = GetControlledTank();
+	ControlledTank = GetControlledTank();
 	if (ControlledTank)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("possesing an player TANK :%s"), *ControlledTank->GetName());
@@ -48,10 +52,6 @@ void ATankPlayerController_CPP::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	AimAtCrossHair();
-	FVector HitLocation;
-	GetSightRayHitLocation(HitLocation);
-	//UE_LOG(LogTemp, Warning, TEXT("TICK TICK BOOM"));
-
 }
 
 ATank_CPP * ATankPlayerController_CPP::GetControlledTank() const
@@ -67,7 +67,11 @@ void ATankPlayerController_CPP::AimAtCrossHair()
 	if (!ControlledTank) { return; }
 	
 	FVector HitLocation;
-	GetSightRayHitLocation(HitLocation);
+	if (GetSightRayHitLocation(HitLocation))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Hit location : %s"), *(HitLocation.ToString()));
+
+	}
 	
 	//get the world location of the line trace through the crosshair
 	//most dii=fficult part tell the possessed tank to aim at this point and maybe move the barrel accordingly
@@ -98,24 +102,30 @@ bool ATankPlayerController_CPP::GetSightRayHitLocation(FVector& HitLocation) con
 	{
 		//line trace along that direction ,we see what we hit
 		FHitResult HitResult;
-		float LineTraceRange = 1000000;
+		
+		FVector StartLocation = PlayerCameraManager->GetCameraLocation();
+		FVector EndLocation = StartLocation + (CrosshairDirection*LineTraceRange);
 		if (GetWorld()->LineTraceSingleByChannel(
 			HitResult,
-			GetPawn()->GetActorLocation(),
-			GetPawn()->GetActorLocation()+CrosshairDirection*LineTraceRange,
+			StartLocation,
+			EndLocation,
 			ECollisionChannel::ECC_Visibility)
 			//two defaulted params
 			)
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Hit location : %s"), *(HitResult.Location.ToString()));
-			}
-
-		
-		//UE_LOG(LogTemp, Warning, TEXT("3D world direction of the crosshair:%s"), *CrosshairDirection.ToString());
-
+		{
+			HitLocation = HitResult.Location;
+			return true;
+		}
+		else
+		{
+			HitLocation = FVector(0);
+			return true;
+		}
 	}
-	
-	return false;
+		else
+		{
+			return false;
+		}
 }
 
 bool ATankPlayerController_CPP::GetCrossHairDirection(FVector2D& CrosshairViewportLocation_,FVector& CrosshairDirection_,FVector& CameraWorldLocation_) const

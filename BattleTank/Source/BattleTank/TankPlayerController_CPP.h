@@ -32,10 +32,14 @@ class BATTLETANK_API ATankPlayerController_CPP : public APlayerController
 		//object pointer used to store the instance of the above class
 		UUserWidget* UserWidget;
 
-		//the pawn being possessed
-		ATank_CPP* ControlledTank;
-
 private:
+
+		UPROPERTY()
+		float LineTraceRange = 1000000;
+
+		//	//the pawn being possessed
+		ATank_CPP* ControlledTank = nullptr;
+
 		//get the tank this tank player controller is posssessing
 		ATank_CPP* GetControlledTank() const;
 
