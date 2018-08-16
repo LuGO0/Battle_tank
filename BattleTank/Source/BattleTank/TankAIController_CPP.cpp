@@ -7,7 +7,8 @@
 
 void  ATankAIController_CPP::BeginPlay()
 {
-	ATank_CPP* ControlledTank = GetControlledTank();
+	Super::BeginPlay();
+	ControlledTank = GetControlledTank();
 	if (ControlledTank)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("yes im possesing an AI TANK :%s"),*ControlledTank->GetName());
@@ -19,7 +20,7 @@ void  ATankAIController_CPP::BeginPlay()
 	
 
 	///logging if the AI got the sight of user tank or not
-	ATank_CPP* PlayerControlledTank = GetPlayerControlledPawn();
+	PlayerControlledTank = GetPlayerControlledPawn();
 	if (PlayerControlledTank)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("yes tank :%s in sight"),*PlayerControlledTank->GetName());
@@ -29,6 +30,13 @@ void  ATankAIController_CPP::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("no user tank not in sight"));
 	}
 
+}
+
+//Tick inheritance
+void ATankAIController_CPP::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	ControlledTank->DelegateToAimingComponent(PlayerControlledTank->GetActorLocation());
 }
 
 ATank_CPP * ATankAIController_CPP::GetControlledTank() const

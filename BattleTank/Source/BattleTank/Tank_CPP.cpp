@@ -18,6 +18,9 @@
 // Sets default values
 ATank_CPP::ATank_CPP()
 {
+	//setting up the tank aiming component
+	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(TEXT("Aiming Component"));
+
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -40,13 +43,13 @@ ATank_CPP::ATank_CPP()
 
 
 
-
+	
 	///getting a reference to the barrel asset
 	ATank_CPP::Barrel = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Barrel"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BarrelAsset(TEXT("StaticMesh'/Game/Custom_Assets/Tank_mesh/tank_fbx_Barrel.tank_fbx_Barrel'"));
 	if (BarrelAsset.Object)
 	{
-		Barrel->SetStaticMesh(BarrelAsset.Object);
+			Barrel->SetStaticMesh(BarrelAsset.Object);
 	}
 
 
@@ -111,15 +114,15 @@ ATank_CPP::ATank_CPP()
 		ATank_CPP::Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	}
 }
-
-
+//constructors finally over
 
 
 // Called when the game starts or when spawned
 void ATank_CPP::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	BarrelLocation = Barrel->GetComponentLocation();
+	LaunchSpot = Barrel->GetSocketLocation(TEXT("LaunchSpot"));
 }
 
 // Called every frame
@@ -164,3 +167,12 @@ void ATank_CPP::SetSpringArmAltitudeAngle(float AxisValue)
 }
 
 
+void ATank_CPP::DelegateToAimingComponent(FVector HitLocation_)
+{
+	TankAimingComponent->AimAt(HitLocation_,this->LaunchSpeed);
+}
+
+UStaticMeshComponent* ATank_CPP::GetBarrelReference()
+{
+	return Barrel;
+}
