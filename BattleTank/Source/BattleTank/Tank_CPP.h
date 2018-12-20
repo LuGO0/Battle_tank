@@ -51,6 +51,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* Barrel = nullptr;
 
+	//trying a new way to soft code assets
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<UStaticMeshComponent> Barrel=nullptr;
 
 	//Spring arm 2D rotation
 	FVector2D SpringArmRotation;

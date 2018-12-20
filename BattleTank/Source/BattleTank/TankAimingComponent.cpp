@@ -1,8 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
+
+#include "TankAimingComponent.h"
 #include"Tank_CPP.h"
 #include "Components/StaticMeshComponent.h"
 #include"Kismet/GameplayStatics.h"
-#include "TankAimingComponent.h"
+
 
 
 // Sets default values for this component's properties
