@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Tank_CPP.h"
+#include "TankAimingComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Misc/App.h"
 #include "Engine/World.h"
@@ -11,7 +12,7 @@
 
 
 
-///////// WARNING !!!!!!!!!!!!!!!! HARD CODED REFERENCE ;( !!!!!!!  i will take care of that from the next project :]
+///////// WARNING !!!!!!!!!!!!!!!! HARD CODED ASSET REFERENCE ;( !!!!!!!  i will take care of that from the next project :]
 
 
 
@@ -53,7 +54,7 @@ ATank_CPP::ATank_CPP()
 	}
 
 
-	///getting a reference to the track asset
+	///getting a reference to the track asset0 
 	ATank_CPP::Track_01 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Track_01"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Track_01_Asset(TEXT("StaticMesh'/Game/Custom_Assets/Tank_mesh/tank_fbx_Track.tank_fbx_Track'"));
 	if (Track_01_Asset.Object)
@@ -125,11 +126,11 @@ void ATank_CPP::BeginPlay()
 	LaunchSpot = Barrel->GetSocketLocation(TEXT("LaunchSpot"));
 }
 
-// Called every frame
-void ATank_CPP::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
+//0 Called every frame
+//void ATank_CPP::Tick(float DeltaTime)
+//{
+//	Super::Tick(DeltaTime);
+//}
 
 // Called to bind functionality to input
 void ATank_CPP::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -137,9 +138,8 @@ void ATank_CPP::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis("AimAzimuth",this,&ATank_CPP::SetSpringArmAzimuthAngle);
+	PlayerInputComponent->BindAxis("AimAzimuth",this, &ATank_CPP::SetSpringArmAzimuthAngle);
 	PlayerInputComponent->BindAxis("AimAltitude", this, &ATank_CPP::SetSpringArmAltitudeAngle);
-
 
 }
 
@@ -150,11 +150,13 @@ void ATank_CPP::SetSpringArmAzimuthAngle(float AxisValue)
 	//_ASSERTE( GetInputAxisValue("AimAzimuth")==AxisValue);
 	SpringArmRotation.X = AxisValue;
 	FRotator SpringArmTickRotation = SpringArm->GetComponentRotation();
+
+	//TODO find a way to setup spring arms yaw according to the input::check did it
+
 	SpringArmTickRotation.Yaw += SpringArmRotation.X;
 	SpringArm->SetWorldRotation(SpringArmTickRotation);
 	
 
-	//TODO find a way to setup spring arms yaw according to the input
 }
 
 void ATank_CPP::SetSpringArmAltitudeAngle(float AxisValue)
@@ -163,7 +165,7 @@ void ATank_CPP::SetSpringArmAltitudeAngle(float AxisValue)
 	FRotator SpringArmTickRotation = SpringArm->GetComponentRotation();
 	SpringArmTickRotation.Pitch += SpringArmRotation.Y;
 	SpringArm->SetWorldRotation(SpringArmTickRotation);
-	//TODO find a way to setup spring arm pitch according to the input axis values
+	//TODO find a way to setup spring arm pitch according to the input axis values  done;}
 }
 
 
@@ -176,3 +178,4 @@ UStaticMeshComponent* ATank_CPP::GetBarrelReference()
 {
 	return Barrel;
 }
+ 

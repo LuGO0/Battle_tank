@@ -4,8 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "Tank_CPP.h"
 #include "TankPlayerController_CPP.generated.h"
+
+
+//
+class ATank_CPP;
+
 
 /**
  * 
@@ -37,7 +41,7 @@ private:
 		UPROPERTY()
 		float LineTraceRange = 1000000;
 
-		//	//the pawn being possessed
+		//the pawn being possessed
 		ATank_CPP* ControlledTank = nullptr;
 
 		//get the tank this tank player controller is posssessing

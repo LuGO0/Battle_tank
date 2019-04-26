@@ -60,7 +60,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation_, float LaunchSpeed)
 	{
 		//get safe normal does is it returns the unit vector for the input variable;
 		FVector LaunchVelocityUnitVector = LaunchVelocity.GetSafeNormal();
-		UE_LOG(LogTemp, Warning, TEXT("%s is aiming at : %s from %s at %f at unit vector %s"), *GetOwner()->GetName(), *(HitLocation_.ToString()), *StartLocation.ToString(), LaunchSpeed,*LaunchVelocityUnitVector.ToString());
+		//UE_LOG(LogTemp, Warning, TEXT("%s is aiming at : %s from %s at %f at unit vector %s"), *GetOwner()->GetName(), *(HitLocation_.ToString()), *StartLocation.ToString(), LaunchSpeed,*LaunchVelocityUnitVector.ToString());
 	
 		MoveBarrel();
 	}

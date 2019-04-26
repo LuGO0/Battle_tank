@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankPlayerController_CPP.h"
+#include "Tank_CPP.h"
 #include "Blueprint/UserWidget.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Classes/AIController.h"
@@ -131,5 +132,5 @@ bool ATankPlayerController_CPP::GetSightRayHitLocation(FVector& HitLocation) con
 bool ATankPlayerController_CPP::GetCrossHairDirection(FVector2D& CrosshairViewportLocation_,FVector& CrosshairDirection_,FVector& CameraWorldLocation_) const
 {
 	return DeprojectScreenPositionToWorld(CrosshairViewportLocation_.X, CrosshairViewportLocation_.Y, CameraWorldLocation_, CrosshairDirection_);
-	// Deprojeceting the screen to the world
+	// Deprojecting the screen to the world
 }
